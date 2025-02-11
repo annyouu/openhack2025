@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結果判定</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fffb0019;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            max-width: 100%;
+            font-size: calc(1.5em + 1vw);
+            color: #333;
+            background-color: #f6f0ad;
+            padding: 20px 118px;
+            margin: 0 0 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            margin-top: 40px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10x rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f6f0ad;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table td {
+            background-color: white;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        table th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        table tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        table tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+        /* table tr:last-child td {
+            border-bottom: none;
+        } */
+
+        a {
+            color: #8b54cf;
+            font-size: 1.1em;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        a:hover {
+            color: #574cae;
+            text-decoration: underline;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: calc(1.2em + 1vw);
+                padding: 15px 50px;
+            }
+
+            table {
+                width: 107%;
+                margin: 10px 0;
+                border-spacing: 0;
+            }
+
+            th,
+            td {
+                font-size: 14px;
+                white-space: normal;
+                /* 文字が折り返される */
+                word-wrap: break-word;
+                /* 長いテキストの折り返しを許可 */
+            }
+
+            td {
+                text-align: center;
+            }
+
+            img {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>結果</h1>
+
+    {% if filename %}
+    <img src="{{ url_for('static', filename='uploads/' + filename )}}" width="300">
+    {% endif %}
+
+    <!-- {% if objects_detected %}
+    <table>
+        <tr>
+            <th>検出されたオブジェクト</th>
+        </tr>
+        {% for obj in objects_detected %}
+        <tr>
+            <td>{{ obj }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>何も検出されませんでした。</p>
+    {% endif %} -->
+
+
+    {% if nutrition_info %}
+    <table>
+        <thead>
+            <tr>
+                <th>名前</th>
+                <th>カロリー</th>
+                <th>炭水化物</th>
+                <th>たんぱく質</th>
+                <th>脂質</th>
+                <th>食物繊維</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for food in nutrition_info %}
+            <tr>
+                <td>{{ food['food_name'] }}</td>
+                <td>{{ food['calories']['value'] }} {{ food['calories']['unit'] }}</td>
+                <td>{{ food['carbs']['value'] }} {{ food['carbs']['unit'] }}</td>
+                <td>{{ food['protein']['value'] }} {{ food['protein']['unit'] }}</td>
+                <td>{{ food['fat']['value'] }} {{ food['fat']['unit'] }}</td>
+                <td>{{ food['fiber']['value'] }} {{ food['fiber']['unit'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>栄養情報は見つかりませんでした。</p>
+    {% endif %}
+
+    <br>
+    <a href="/">新しい画像をアップロードする</a>
+</body>
+
+</html>
